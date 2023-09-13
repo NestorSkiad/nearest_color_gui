@@ -1,35 +1,30 @@
-# eframe template
+# Nearest Color GUI
 
-[![dependency status](https://deps.rs/repo/github/emilk/eframe_template/status.svg)](https://deps.rs/repo/github/emilk/eframe_template)
-[![Build Status](https://github.com/emilk/eframe_template/workflows/CI/badge.svg)](https://github.com/emilk/eframe_template/actions?workflow=CI)
+This is a **proof-of-concept project** for a feature I'd like included in DaVinci Resolve. I've recently taken up some video
+production projects ([available here]()), which have involved doing a fair amount of color work.
 
-This is a template repo for [eframe](https://github.com/emilk/egui/tree/master/crates/eframe), a framework for writing apps using [egui](https://github.com/emilk/egui/).
+In the color tab in Resolve, you use nodes to apply different effects. The nodes are small and it's easy to create a complicated
+web, so you're supposed to name each node. Naming nodes isn't very creative, for example if you use a color space transform
+from ACES-CCT to Rec.709, you'd usually name the node something like "acescct to rec709". The practice becomes tedious,
+so I've stopped naming my nodes.
 
-The goal is for this to be the simplest way to get started writing a GUI app in Rust.
+This obviously wouldn't be very difficult to automate, but what might be more difficult is auto-naming nodes that involve
+colors. For those nodes, you'd name them something like "teal lows & orange highs", but color selection is done through
+color wheels, so we'd have to get the color name from the RGB values.
 
-You can compile your app natively or for the web, and share it using Github Pages.
+With AI and ML, vector similarity is a massive problem. Fortunately, because there's not that many named colors out there,
+we can implement a relatively simple O(N) algorithm to find the nearest color.
 
-## Getting started
+For a given color that the user inputs, we calculate its Euclidean distance from each of the ~850 named colors we've got and
+find the minimum.
 
-Start by clicking "Use this template" at https://github.com/emilk/eframe_template/ or follow [these instructions](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template).
+This happens extremely quickly, so much so that I've developed a non-GUI version of this app, which finds the nearest named
+color for all 16777216 8-bit RGB colors in only a couple of minutes.
 
-Change the name of the crate: Chose a good name for your project, and change the name to it in:
-* `Cargo.toml`
-    * Change the `package.name` from `eframe_template` to `your_crate`.
-    * Change the `package.authors`
-* `main.rs`
-    * Change `eframe_template::TemplateApp` to `your_crate::TemplateApp`
-* `index.html`
-    * Change the `<title>eframe template</title>` to `<title>your_crate</title>`. optional.
-* `assets/sw.js`
-  * Change the `'./eframe_template.js'` to `./your_crate.js` (in `filesToCache` array)
-  * Change the `'./eframe_template_bg.wasm'` to `./your_crate_bg.wasm` (in `filesToCache` array)
+### Frameworks used
 
-### Learning about egui
-
-`src/app.rs` contains a simple example app. This is just to give some inspiration - most of it can be removed if you like.
-
-The official egui docs are at <https://docs.rs/egui>. If you prefer watching a video introduction, check out <https://www.youtube.com/watch?v=NtUkr_z7l84>. For inspiration, check out the [the egui web demo](https://emilk.github.io/egui/index.html) and follow the links in it to its source code.
+* EGui - with the EFrame template. It's an intermediate level UX framework, one level above Win32 and OpenGL. There's a color picker in the big example project, but it was impossible to adapt to my needs.
+* csv - used to read the color names and RGB values from [this file from Codebrainz](https://github.com/codebrainz/color-names/blob/master/output/colors.csv).
 
 ### Testing locally
 
@@ -68,9 +63,3 @@ We use [Trunk](https://trunkrs.dev/) to build for web target.
 > If `gh-pages` is not available in `Source`, just create and push a branch called `gh-pages` and it should be available.
 
 You can test the template app at <https://emilk.github.io/eframe_template/>.
-
-## Updating egui
-
-As of 2023, egui is in active development with frequent releases with breaking changes. [eframe_template](https://github.com/emilk/eframe_template/) will be updated in lock-step to always use the latest version of egui.
-
-When updating `egui` and `eframe` it is recommended you do so one version at the time, and read about the changes in [the egui changelog](https://github.com/emilk/egui/blob/master/CHANGELOG.md) and [eframe changelog](https://github.com/emilk/egui/blob/master/crates/eframe/CHANGELOG.md).
