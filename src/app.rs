@@ -57,6 +57,9 @@ impl eframe::App for TemplateApp {
 
             let nearest_color = nearest_color_single(&standard_colors, [*r as i64, *g as i64, *b as i64]);
             ui.heading(format!("Nearest color: {}", nearest_color.name));
+
+            let (rect, _response) = ui.allocate_at_least(Vec2::new(200.0, 200.0), Sense::hover());
+            ui.painter().rect_filled(rect, 0.0, Color32::from_rgb(nearest_color.color[0] as u8, nearest_color.color[1] as u8, nearest_color.color[2] as u8));
             ui.label(format!("Values: {}", color_to_str(nearest_color.color)));
         });
     }
