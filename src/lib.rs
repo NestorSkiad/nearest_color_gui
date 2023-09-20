@@ -71,7 +71,7 @@ fn _get_standard_colors() -> Vec<StandardColor> {
 // hallelujah https://rust-lang-nursery.github.io/rust-cookbook/encoding/csv.html
 fn get_standard_colors() -> Vec<StandardColor> {
     let mut res: Vec<StandardColor> = Vec::with_capacity(865);
-    let sth = include_str!("C:/Users/Nestor/IdeaProjects/nearest_color/colors.csv");
+    let sth = include_str!("colors.csv");
     let mut rdr = csv::Reader::from_reader(sth.as_bytes());
 
     for record in rdr.records() {
